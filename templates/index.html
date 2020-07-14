@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en"  data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,6 +45,12 @@
 {% block content %}
 
     <div class="container">
+    <div id="theme-switcher" class="theme-switch-button">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+    </svg>
+</div>
         <div class="mx-auto">
             <h2 class="text-center mt-5 mb-3 title-head">Django Query Playground
                 <small class="text-warning text-sm"
@@ -78,7 +84,7 @@
 
                 </div>
                 <div class="col-md-6">
-                    <div class="card p-3 mb-3 shadow-lg bg-white">
+                    <div class="card p-3 mb-3 shadow-lg">
                         <h4 class="text-center mb-3">Query</h4>
                         <textarea id="query" cols="1" rows="1"></textarea>
                         <small class="text-danger" id="query-err"></small>
@@ -120,6 +126,49 @@
 
 
 {% block javascript %}
+     <script type="text/javascript">
+        // Wait for document to load
+        document.addEventListener("DOMContentLoaded", function (event) {
+            let currentTheme = localStorage.getItem("data-theme")
+            const Theme = {
+                "dark": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\"\n" +
+                    "         stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">\n" +
+                    "        <path d=\"M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z\"></path>\n" +
+                    "    </svg>",
+                "light": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" " +
+                    "viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\">" +
+                    "<circle cx=\"12\" cy=\"12\" r=\"5\"></circle>" +
+                    "<line x1=\"12\" y1=\"1\" x2=\"12\" y2=\"3\"></line>" +
+                    "<line x1=\"12\" y1=\"21\" x2=\"12\" y2=\"23\"></line>" +
+                    "<line x1=\"4.22\" y1=\"4.22\" x2=\"5.64\" y2=\"5.64\"></line>" +
+                    "<line x1=\"18.36\" y1=\"18.36\" x2=\"19.78\" y2=\"19.78\"></line>" +
+                    "<line x1=\"1\" y1=\"12\" x2=\"3\" y2=\"12\"></line>" +
+                    "<line x1=\"21\" y1=\"12\" x2=\"23\" y2=\"12\"></line>" +
+                    "<line x1=\"4.22\" y1=\"19.78\" x2=\"5.64\" y2=\"18.36\"></line>" +
+                    "<line x1=\"18.36\" y1=\"5.64\" x2=\"19.78\" y2=\"4.22\"></line>" +
+                    "</svg>"
+            }
+            document.documentElement.setAttribute("data-theme", currentTheme ? currentTheme : "light");
+
+            let themeSwitcher = document.getElementById("theme-switcher");
+            themeSwitcher.innerHTML = Theme[currentTheme] ? Theme[currentTheme] : Theme["dark"]
+
+            // When our button gets clicked
+            themeSwitcher.onclick = function () {
+                // Get the current selected theme, on the first run
+                // it should be `light`
+                let currentTheme = document.documentElement.getAttribute("data-theme");
+
+                // Switch between `dark` and `light`
+                let switchToTheme = currentTheme === "dark" ? "light" : "dark"
+
+                // Set our currenet theme to the new one
+                document.documentElement.setAttribute("data-theme", switchToTheme);
+                themeSwitcher.innerHTML = Theme[currentTheme]
+                localStorage.setItem("data-theme", switchToTheme)
+            }
+        });
+    </script>
 
     <script>
         let column = []
