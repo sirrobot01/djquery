@@ -1,0 +1,43 @@
+button {
+    border-radius: 4px !important;
+}
+
+textarea {
+    width: 100%;
+}
+
+
+.footer {
+    bottom: 0;
+    right: 0;
+    position: fixed;
+    margin-bottom: 0;
+}
+
+
+body {
+    width: 100%;
+}
+
+
+#query {
+    width: 100%;
+}
+
+.card {
+    border-radius: 8px;
+    border-top: 3px solid #a6c;
+}
+
+.table-parent {
+    max-height: 400px;
+    overflow: auto;
+}
+
+
+.foot {
+    left: 0;
+    bottom: 0;
+    text-align: center;
+
+}
