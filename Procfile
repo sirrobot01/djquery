@@ -1,0 +1,1 @@
+web: gunicorn djangoQuerier.wsgi --log-file -
