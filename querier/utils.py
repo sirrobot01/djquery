@@ -1,8 +1,5 @@
-class MandemNi():
-    search = models.Foreignkey(verbose_name="Hello")
-    search2 = models.CharField()
-
-
-class AreaBoysGirl():
-    search = models.Foreignkey()
-    search2 = models.CharField()
+class M(models.Model):
+  first_name = models.CharField()
+  last_name = models.CharField()
+  username = models.CharField()
+  age = models.IntegerField()

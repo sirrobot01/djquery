@@ -1,7 +1,7 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en"  data-theme="dark">
+<html lang="en" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -45,12 +45,13 @@
 {% block content %}
 
     <div class="container">
-    <div id="theme-switcher" class="theme-switch-button">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-    </svg>
-</div>
+        <div id="theme-switcher" class="theme-switch-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor"
+                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
         <div class="mx-auto">
             <h2 class="text-center mt-5 mb-3 title-head">Django Query Playground
                 <small class="text-warning text-sm"
@@ -70,7 +71,9 @@
 
             <div class="row mb-2 mt-2">
                 <div class="col-md-6 table-parent">
-                    <a id="info" class="text-right" title="Double click on each value to edit" style="display: none"><b>?</b></a>
+                    <small id="info" class="text-muted" style="display: none">
+                        Hint: Double click on a value to change it
+                    </small>
                     <table id="data" class="table table-bordered table-sm responsive" style="display: none">
 
                         <thead>
@@ -126,7 +129,7 @@
 
 
 {% block javascript %}
-     <script type="text/javascript">
+    <script type="text/javascript">
         // Wait for document to load
         document.addEventListener("DOMContentLoaded", function (event) {
             let currentTheme = localStorage.getItem("data-theme")
@@ -219,11 +222,12 @@
                         $('#table-head').append(`<th scope=col>${value}</th>`)
                     })
 
-                    $.each(dataLs[0], (index, value) => {
-                        let el = `<tr><td>${value}</td>`;
-                        for (let i = 1; i < column.length; i++) {
-                            el += `<td class="editable" row=${i} column=${index}>${dataLs[i][index]}</td>`
-                        }
+                    $.each(dataLs, (index, value) => {
+                        let el = '<tr>';
+                        $.each(value, (idx, val) => {
+                            el += `<td class="editable" row=${index} column=${idx}>${val}</td>`
+
+                        })
                         $('#body-data').append(el.concat('</tr>'))
                     })
                     $("#info").css('display', '')
@@ -273,14 +277,14 @@
                         if (data['success']) {
                             if (data['column'].length && data['data'].length) {
                                 $.each(data['column'], (name, value) => {
-                                    if (value !== "pk") $('#newTable-head').append(`<th scope=col>${value}</th>`)
+                                    $('#newTable-head').append(`<th scope=col>${value}</th>`)
                                 })
-                                $.each(data['data'][0], (index, value) => {
+                                $.each(data['data'], (index, value) => {
                                     let el = `<tr>`;
-                                    for (let i = 1; i < data['column'].length; i++) {
-                                        el += `<td>${data['data'][i][index]}</td>`
+                                    $.each(value, (idx, val) => {
+                                        el += `<td>${val}</td>`
 
-                                    }
+                                    })
                                     $('#newBody-data').append(el.concat('</tr>'))
                                 })
                                 $('#newData').css('display', '')
@@ -310,6 +314,14 @@
             label.focusout(function () {
                 dataLs[row][col] = label.children("input").val()
                 label.html(dataLs[row][col])
+            })
+
+            label.keypress(function (e) {
+                if (e.keyCode === 13) {
+                    dataLs[row][col] = label.children("input").val()
+                    label.html(dataLs[row][col])
+                }
+
             })
         })
 
