@@ -51,7 +51,8 @@ def validate(request):
             {'success': True, 'is_valid': is_valid, 'data': data, 'column': column_ls, 'className': cls_name})
         return JsonResponse(context)
     except Exception as e:
-        err = 'Cannot validate the code <a href="#sample">Check sample</a>'
+        err = 'Cannot validate the code <a target="_blank" ' \
+              'href="https://www.loom.com/share/d975afebb5d648829d12ea9cd261f658">Check sample</a>'
         return JsonResponse({'success': False, 'err': err, 'is_valid': is_valid})
 
 
@@ -65,7 +66,6 @@ def query(request):
     new_data = []
 
     cls_name = request.GET.get("className")
-
 
     success = False
     try:
