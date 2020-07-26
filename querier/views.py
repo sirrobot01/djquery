@@ -90,21 +90,27 @@ def query(request):
                         for key in keys:
                             key_column = key.split("=")[0].strip()
                             key_query = key.split("=")[1].strip().strip('"').strip("'")
-
-                            if key_column == "pk":
-                                key_query = int(key_query)
                             if key_column not in column:
                                 err = f'Invalid query: {key.split("=")[0].strip()} is not a column'
-                            else:
+                            elif key_column != 'pk':
                                 queries.append(key_query)
-                        print(queries)
-                        for d in data:
-                            print(d)
-                            if all(x in d for x in queries):
-                                new_data.append(d)
+                            else:
+                                key_query = int(key_query)
+                                for d in data:
+                                    if d[0] == key_query:
+                                        new_data.append(d)
+                        if queries:
+                            if query_type == 'exclude':
+                                for d in data:
+                                    if not all(x in d for x in queries):
+                                        new_data.append(d)
+                            else:
+                                for d in data:
+                                    if all(x in d for x in queries):
+                                        new_data.append(d)
                         if new_data:
                             if query_type == 'get':
-                                if len(new_data[0]) > 1:
+                                if len(new_data) > 1:
                                     err = f"Get query can only return one query object, This returned {len(new_data[0])}"
                                     success = False
                                 else:
